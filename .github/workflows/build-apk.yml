@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # מבטיח שכל הקבצים יימשכו
 
       - name: Setup JDK
         uses: actions/setup-java@v3
@@ -22,12 +24,14 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
 
+      - name: Generate Gradle Wrapper
+        run: gradle wrapper  # יצירת קובץ gradlew
+
       - name: Grant execute permissions for gradlew
-        run: chmod +x gradlew
+        run: chmod +x gradlew  # מעניק הרשאות ריצה לקובץ gradlew
 
       - name: Build APK
-        run: ./gradlew assembleDebug
-        continue-on-error: true  # מונע עצירת התהליך במקרה של כשל
+        run: ./gradlew assembleDebug  # הרצת Gradle כדי לקמפל את ה-APK
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
